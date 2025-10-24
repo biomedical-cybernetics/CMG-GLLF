@@ -8,98 +8,19 @@ def get_tuner(mode, indim, train_2, init_method, dataset, rectify=False, single_
     '''
     train_2 indicates whether train the second parameter
     '''
-    if mode == 'linear':
-        return Linear_tuner(indim, train_2, init_method, dataset, rectify, single_param)
-    elif mode == 'cubic':
-        return Cubic_tuner(indim, train_2, init_method, dataset, rectify, single_param)
-    elif mode == 'CM-GLLF-logistic':
-        return CM_GLLF_tuner(indim, train_2, init_method, dataset, rectify, offset=1e-6, single_param=single_param)
-    if mode == 'linear-valuewise':
-        return Linear_tuner_valuewise(indim, train_2, init_method, dataset, rectify, single_param)
-    elif mode == 'cubic-valuewise':
-        return Cubic_tuner_valuewise(indim, train_2, init_method, dataset, rectify, single_param)
-    elif mode == 'CM-GLLF-logistic-valuewise':
-        return CM_GLLF_tuner_valuewise(indim, train_2, init_method, dataset, rectify, offset=1e-6, single_param=single_param)
-    elif mode == 'CM-GLLF-logistic-clamp-valuewise':
-        return CM_GLLF_tuner_clamp_valuewise(indim, train_2, init_method, dataset, rectify, offset=1e-6, single_param=single_param)
-    elif mode == 'adaptive-relu-valuewise':
-        return AdaptiveClassic_tuner_valuewise(indim, train_2, init_method, dataset, mode='ReLU', rectify=rectify, single_param=single_param)
-    elif mode == 'adaptive-leakyrelu-valuewise':
-        return AdaptiveClassic_tuner_valuewise(indim, train_2, init_method, dataset, mode='LeakyReLU', rectify=rectify, single_param=single_param)
-    elif mode == 'adaptive-sigmoid-valuewise':
+
+    if mode == 'adaptive-sigmoid-valuewise':
         return AdaptiveClassic_tuner_valuewise(indim, train_2, init_method, dataset, mode='Sigmoid', rectify=rectify, single_param=single_param)
     elif mode == 'adaptive-tanh-valuewise':
         return AdaptiveClassic_tuner_valuewise(indim, train_2, init_method, dataset, mode='tanh', rectify=rectify, single_param=single_param)
-    elif mode == 'adaptive-sigmoid-valuewise-unrestricted':
-        return AdaptiveClassic_tuner_valuewise(indim, train_2, init_method, dataset, mode='Sigmoid', rectify=rectify, single_param=single_param, positive_a=False)
-    elif mode == 'adaptive-tanh-valuewise-unrestricted':
-        return AdaptiveClassic_tuner_valuewise(indim, train_2, init_method, dataset, mode='tanh', rectify=rectify, single_param=single_param, positive_a=False)
-    elif mode == 'sigmoid':
-        return nn.Sigmoid()
-    elif mode == 'tanh':
-        return nn.Tanh()
-    # adaptive tanh and sigmoid with adaptive minmax
-    elif mode == 'adaptive-sigmoid-valuewise-adaptive-minmax':
-        return AdaptiveClassic_tuner_valuewise(indim, train_2, init_method, dataset, mode='Sigmoid', rectify=rectify, single_param=single_param, adaptive_minmax='symmetric')
-    elif mode == 'adaptive-tanh-valuewise-adaptive-minmax':
-        return AdaptiveClassic_tuner_valuewise(indim, train_2, init_method, dataset, mode='tanh', rectify=rectify, single_param=single_param, adaptive_minmax='symmetric')
-    # adaptive tanh and sigmoid with adaptive asymmetric minmax
-    elif mode == 'adaptive-sigmoid-valuewise-adaptive-minmax-asymmetric':
-        return AdaptiveClassic_tuner_valuewise(indim, train_2, init_method, dataset, mode='Sigmoid', rectify=rectify, single_param=single_param, adaptive_minmax='asymmetric')
-    elif mode == 'adaptive-tanh-valuewise-adaptive-minmax-asymmetric':
-        return AdaptiveClassic_tuner_valuewise(indim, train_2, init_method, dataset, mode='tanh', rectify=rectify, single_param=single_param, adaptive_minmax='asymmetric')
-    # adaptive tanh and sigmoid with adaptive asymmetric minmax unrestricted
-    elif mode == 'adaptive-sigmoid-valuewise-adaptive-minmax-asymmetric-unrestricted':
-        return AdaptiveClassic_tuner_valuewise(indim, train_2, init_method, dataset, mode='Sigmoid', rectify=rectify, single_param=single_param, adaptive_minmax='asymmetric', positive_a=False)
-    elif mode == 'adaptive-tanh-valuewise-adaptive-minmax-asymmetric-unrestricted':
-        return AdaptiveClassic_tuner_valuewise(indim, train_2, init_method, dataset, mode='tanh', rectify=rectify, single_param=single_param, adaptive_minmax='asymmetric', positive_a=False)
-    # srelu
-    elif mode == 'srelu_valuewise':
-        return SReLU(rectify=False, neuronwise=not single_param, num_neurons=indim if not single_param else 1, init_method=init_method)
     elif mode == 'srelu_valuewise_positive':
-        return SReLU(rectify=False, neuronwise=not single_param, num_neurons=indim if not single_param else 1, init_method=init_method, positive_slopes=True)    
-    # restricted CM-GLLF
-    elif mode == 'CM-GLLF-logistic-valuewise-restrict-old':
-        return CM_GLLF_tuner_valuewise_restrict(indim, train_2, init_method, dataset, 'old', rectify=rectify, offset=1e-6, single_param=single_param)
-    elif mode == 'CM-GLLF-logistic-valuewise-restrict-minmax':
-        return CM_GLLF_tuner_valuewise_restrict(indim, train_2, init_method, dataset, 'minmax', rectify=rectify, offset=1e-6, single_param=single_param)    
-    elif mode == 'CM-GLLF-logistic-valuewise-restrict-minmax-mapping':
-        return CM_GLLF_tuner_valuewise_restrict(indim, train_2, init_method, dataset, 'minmax_mapping', rectify=rectify, offset=1e-6, single_param=single_param)        
-    # linear valuewise and cubic valuewise with positive a
+        return SReLU(rectify=False, neuronwise=not single_param, num_neurons=indim if not single_param else 1, init_method=init_method, positive_slopes=True)        
     elif mode == 'linear-valuewise-positive':
         return Linear_tuner_valuewise(indim, train_2, init_method, dataset, rectify, single_param, positive_a=True)
     elif mode == 'cubic-valuewise-positive':
         return Cubic_tuner_valuewise(indim, train_2, init_method, dataset, rectify, single_param, positive_a=True)
-    # # CM-GLLF with all ranges (logistic, logit, all)
-    elif mode == 'CM-GLLF-logistic-valuewise-new':
-        return CM_GLLF_tuner_flexible(indim, train_2, init_method, dataset, minmax_setting='old', mode='logistic' ,rectify=rectify, offset=1e-6)
-    elif mode == 'CM-GLLF-logit-valuewise':
-        return CM_GLLF_tuner_flexible(indim, train_2, init_method, dataset, minmax_setting='old', mode='logit' ,rectify=rectify, offset=1e-6)
-    elif mode == 'CM-GLLF-all-valuewise':
-        return CM_GLLF_tuner_flexible(indim, train_2, init_method, dataset, minmax_setting='old', mode='all' ,rectify=rectify, offset=1e-6)
     elif mode == 'CM-GLLF-all-valuewise-minmax-mapping':
-        return CM_GLLF_tuner_flexible(indim, train_2, init_method, dataset, minmax_setting='minmax_mapping', mode='all' ,rectify=rectify, offset=1e-6)    
-    elif mode == 'CM-GLLF-all-valuewise-minmax-pn1':
-        return CM_GLLF_tuner_flexible(indim, train_2, init_method, dataset, minmax_setting='minmax_pn1', mode='all' ,rectify=rectify, offset=1e-6)
-    elif mode == 'CM-GLLF-all-valuewise-minmax-pn2':
-        return CM_GLLF_tuner_flexible(indim, train_2, init_method, dataset, minmax_setting='minmax_pn2', mode='all' ,rectify=rectify, offset=1e-6)
-    elif mode =='CM-GLLF-all-valuewise-minmax-dataset':
-        return CM_GLLF_tuner_flexible(indim, train_2, init_method, dataset, minmax_setting='minmax_dataset', mode='all' ,rectify=rectify, offset=1e-6)
-    
-    # # CM-GLLF with trainable min/max parameters
-    # elif mode == 'CM-GLLF-logistic-trainable-minmax':
-    #     return CM_GLLF_tuner_trainable_minmax(indim, train_2, init_method, dataset, mode='logistic', rectify=rectify, offset=1e-6)
-    # elif mode == 'CM-GLLF-logit-trainable-minmax':
-    #     return CM_GLLF_tuner_trainable_minmax(indim, train_2, init_method, dataset, mode='logit', rectify=rectify, offset=1e-6)
-    elif mode == 'CM-GLLF-all-trainable-minmax':
-        return CM_GLLF_tuner_trainable_minmax(indim, train_2, init_method, dataset, mode='all', rectify=rectify, offset=1e-6)
-
-    # elif mode == 'CM-GLLF-logistic-valuewise-new':
-    #     return CM_GLLF_tuner_all_valuewise(indim, train_2, init_method, dataset, 'logistic' ,rectify, offset=1e-6, single_param=single_param)        
-    # elif mode == 'CM-GLLF-logit-valuewise':
-    #     return CM_GLLF_tuner_all_valuewise(indim, train_2, init_method, dataset, 'logit' ,rectify, offset=1e-6, single_param=single_param)       
-    # elif mode == 'CM-GLLF-all-valuewise':
-    #     return CM_GLLF_tuner_all_valuewise(indim, train_2, init_method, dataset, 'all' ,rectify, offset=1e-6, single_param=single_param)             
+        return CM_GLLF_tuner_flexible(indim, train_2, init_method, dataset, minmax_setting='minmax_mapping', mode='all' ,rectify=rectify, offset=1e-6)              
     else:
         raise ValueError(f"Invalid tuner mode: {mode}")
 
