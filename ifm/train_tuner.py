@@ -279,7 +279,7 @@ if __name__ == '__main__':
     parser.add_argument('--epochs', type=int, default=50, help='Number of epochs to train')
     parser.add_argument('--seed', type=int, default=0, help='Random seed for reproducibility')
     parser.add_argument('--use_tuner', action='store_true', help='Use tuner for input transformation')
-    parser.add_argument('--mode', type=str, default='CM-GLLF-logistic', help='Tuner mode (linear, cubic, CM-GLLF-logistic)')
+    parser.add_argument('--mode', type=str, default='CM-GLLF-logistic', help='Tuner mode')
     parser.add_argument('--train_2', action='store_true', help='Train second parameter (b for linear/cubic, I for CM-GLLF)')
     parser.add_argument('--init_method', type=str, default='define', help='Initialization method (define, uniform)')
     parser.add_argument('--device',type=int, default=0, help='Device to use (GPU index)')

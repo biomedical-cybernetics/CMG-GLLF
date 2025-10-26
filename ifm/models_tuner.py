@@ -1,6 +1,5 @@
-from tuners import (Linear_tuner, Cubic_tuner, CM_GLLF_tuner, Linear_tuner_valuewise, Cubic_tuner_valuewise, CM_GLLF_tuner_valuewise,
-                     CM_GLLF_tuner_clamp_valuewise, AdaptiveClassic_tuner_valuewise, SReLU, CM_GLLF_tuner_valuewise_restrict,
-                     CM_GLLF_tuner_flexible, CM_GLLF_tuner_trainable_minmax) #, CM_GLLF_tuner_all_valuewise
+from tuners import (Linear_tuner_valuewise, Cubic_tuner_valuewise, 
+                    AdaptiveClassic_tuner_valuewise, SReLU, CM_GLLF_tuner_flexible) #, CM_GLLF_tuner_all_valuewise
 import torch.nn as nn
 
 
